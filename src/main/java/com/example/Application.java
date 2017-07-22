@@ -6,11 +6,19 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.data.domain.AuditorAware;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
 
-@EnableJpaAuditing
+@EnableJpaAuditing(auditorAwareRef = "auditor")
 @SpringBootApplication
 public class Application {
+	
+	@Bean
+	AuditorAware<String> auditor() {
+		return () -> {
+			return "Vinay Mishra"; // Should be logged in user form spring security.
+		};
+	}
 	
 	@Bean
 	CommandLineRunner runner(EmployeeRepository repository){
