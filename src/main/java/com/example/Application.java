@@ -2,13 +2,25 @@ package com.example;
 
 import java.util.Arrays;
 
+import javax.sql.DataSource;
+
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseBuilder;
+import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 
 @SpringBootApplication
 public class Application {
+	
+	@Bean
+	DataSource h2(){
+		return new EmbeddedDatabaseBuilder()
+					.setType(EmbeddedDatabaseType.H2)
+					.addScripts("schema.sql", "schema-audit.sql")
+					.build();
+	}
 	
 	@Bean
 	CommandLineRunner runner(EmployeeRepository repository, EmployeeRevisionRepository revisionRepository){

@@ -4,6 +4,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.MappedSuperclass;
+import javax.persistence.SequenceGenerator;
 
 @MappedSuperclass
 public class BaseEntity {
@@ -18,7 +19,8 @@ public class BaseEntity {
 	}
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@SequenceGenerator(name = "idGeneratorSequence", sequenceName = "EMP_SEQ")
+	@GeneratedValue(generator="idGeneratorSequence", strategy=GenerationType.SEQUENCE)
 	public Long getId() {
 		return id;
 	}

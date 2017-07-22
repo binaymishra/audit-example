@@ -1,11 +1,15 @@
 package com.example;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
 
+
 @Entity
 @Audited
+@Table(name = "EMP")
 public class Employee extends BaseEntity {
 	
 	String name;
@@ -22,6 +26,7 @@ public class Employee extends BaseEntity {
 		this.name = name;
 	}
 
+	@Column(name = "NAME")
 	public String getName() {
 		return name;
 	}
