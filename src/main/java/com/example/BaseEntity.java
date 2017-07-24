@@ -19,7 +19,7 @@ public class BaseEntity {
 	}
 
 	@Id
-	@SequenceGenerator(name = "idGeneratorSequence", sequenceName = "EMP_SEQ")
+	@SequenceGenerator(name = "idGeneratorSequence", sequenceName = "ID_GENERATOR_SEQ")
 	@GeneratedValue(generator="idGeneratorSequence", strategy=GenerationType.SEQUENCE)
 	public Long getId() {
 		return id;

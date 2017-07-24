@@ -14,6 +14,7 @@ import org.springframework.jdbc.datasource.embedded.EmbeddedDatabaseType;
 @SpringBootApplication
 public class Application {
 	
+	
 	@Bean
 	DataSource h2(){
 		return new EmbeddedDatabaseBuilder()
@@ -23,33 +24,66 @@ public class Application {
 	}
 	
 	@Bean
-	CommandLineRunner runner(EmployeeRepository repository, EmployeeRevisionRepository revisionRepository){
+	CommandLineRunner runner(
+			EmployeeRepository employeeRepository, 
+			DepartmentRepositroy departmentRepositroy,
+			EmployeeRevisionRepository revisionRepository){
+		
 		return args -> {
-			repository.save(Arrays.asList(
-					new Employee("John Doe")
-					)); // create new employee named John Doe
-			
-			System.out.println("===========findAll()===========");
-			repository.findAll().stream().forEach(e -> 
-						System.err.println(e)
+			departmentRepositroy.save(
+					Arrays.asList(
+							new Department("SALES"), 
+							new Department("MARKETING")
+							)
 					);
 			
-			final Long employeeId = Long.valueOf(1);
-			Employee johnDoe = repository.findOne(employeeId); // find John Doe
+			departmentRepositroy.findAll().stream()
+				.forEach(dept -> {
+					System.err.println(dept);
+				});
+			
+			
+			Department salesDepartment = departmentRepositroy.findOne(1L);
+			employeeRepository.save(
+					Arrays.asList(
+								new Employee("John Doe", salesDepartment),
+								new Employee("Amit Kumar", salesDepartment)
+							)
+				);
+			
+			employeeRepository.findAll()
+				.stream()
+				.forEach(emp -> {
+					System.err.println(emp + "--> "+emp.getDepartment());
+				});
+			
+			final Long employeeId = Long.valueOf(50);
+			Employee johnDoe = employeeRepository.findOne(employeeId); // find John Doe
 			
 			johnDoe.setName("Jane Doe"); 
-			Employee johnToJane = repository.save(johnDoe); // update name to Jane Doe
+			Employee johnToJane = employeeRepository.save(johnDoe); // update name to Jane Doe
 			
-			repository.delete(johnToJane); // delete John Doe / Jane Doe
+			employeeRepository.findAll().stream().forEach(emp -> System.err.println(emp + "--> "+emp.getDepartment())); 
+			
+			employeeRepository.delete(johnToJane); // delete John Doe / Jane Doe
+			
+			employeeRepository.findAll().stream().forEach(emp -> System.err.println(emp + "--> "+emp.getDepartment())); 
+			
+			departmentRepositroy.findAll().stream()
+			.forEach(dept -> {
+				System.err.println(dept);
+			});
+			
+			
 			
 			// Expected three revisions, create , update, delete
-						System.out.println("===========findAllRevisions()===========");
-						revisionRepository.listOfRevisions(employeeId)
-							.stream()
-							.forEach(erv -> {
-								System.err.println(erv);
-							});;
-			
+			System.out.println("===========findAllRevisions()===========");
+			revisionRepository.listOfRevisions(50L)
+				.stream()
+				.forEach(erv -> {
+					System.err.println(erv);
+				});;
+
 		};
 	}
 

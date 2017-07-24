@@ -2,6 +2,8 @@ package com.example;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
 import org.hibernate.envers.Audited;
@@ -13,6 +15,8 @@ import org.hibernate.envers.Audited;
 public class Employee extends BaseEntity {
 	
 	String name;
+	
+	Department department;
 	
 	public Employee() {	}
 
@@ -26,6 +30,12 @@ public class Employee extends BaseEntity {
 		this.name = name;
 	}
 
+	public Employee(String name, Department department) {
+		super();
+		this.name = name;
+		this.department = department;
+	}
+
 	@Column(name = "NAME")
 	public String getName() {
 		return name;
@@ -35,8 +45,21 @@ public class Employee extends BaseEntity {
 		this.name = name;
 	}
 
+	@ManyToOne
+	@JoinColumn(name = "DEPT_ID")
+	public Department getDepartment() {
+		return department;
+	}
+
+	public void setDepartment(Department department) {
+		this.department = department;
+	}
+
 	@Override
 	public String toString() {
-		return "Employee [name=" + name + ", id=" + id + "]";
+		return "Employee ["
+				+ "name=" + name 
+				+ ", empId=" + getId() 
+				+ "]";
 	}
 }
